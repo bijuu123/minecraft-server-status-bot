@@ -40,9 +40,9 @@ const updateChannel = async() => {
 		} else if(status == "Offline") {
 			client.user.setPresence({
 				activity: {
-					name: 'Minecraft | Offline'
+					name: 'oi help | clydebot.tk'
 				},
-				status: 'idle'
+				status: 'online'
 			}).catch(console.error);
 			if(config.pinUpdate) {
 				updatePin(body)
@@ -78,23 +78,19 @@ const updatePin = async(body) => {
 		const cleanMotD = body.motd.replace(/§[0-9,a-z]/g,"");
 		const embed = new Discord.MessageEmbed().setAuthor(`${saddress}:${sport}`).attachFiles(attachment).setThumbnail("attachment://icon.png").addFields({
 			name: 'Motd',
-						value: `${body.motd ? `${cleanMotD}` : '\u200b'}`
+						value: `${body.motd ? `${cleanMotD}` : '\u200b'}` 
+					}, {
+						name: 'Players',
+						value: `${body.players.now}/${body.players.max} ${(body.players.sample == null?'':playersNow)}`
 					}, {
 						name: 'Version',
 						value: `${body.server.name ? `${body.server.name}` : '\u200b'}`,
 						inline: true
-					}, {
-						name: 'Status',
-						value: `${(body.online ? "Online" : "Offline")}`,
-						inline: true
-					}, {
-						name: 'Players',
-						value: `${body.players.now}/${body.players.max} ${(body.players.sample == null?'':playersNow)}`
-		}, ).setColor("#5b8731").setFooter(`Minecraft Server Status Bot for Discord`)
+		}, ).setColor("#5b8731").setFooter(`ClydeStatus.tk`)
 		try {
 			const message = await channel.messages.fetch(config.pinId);
 			if(!message) return debug('Unable to find message.');
-			await message.edit(`Status for **${saddress}:${sport}**:`, {
+			await message.edit(`Status for **${saddress}`, {
 				embed
 			});
 			debug('Updated pin.');
@@ -108,21 +104,17 @@ const updatePin = async(body) => {
 			name: 'Motd',
 			value: `\u200b`
 		}, {
+			name: 'Players',
+			value: `\u200b`
+		}, {
 			name: 'Version',
 			value: `\u200b`,
 			inline: true
-		}, {
-			name: 'Status',
-			value: `${(body.online ? "Online" : "Offline")}`,
-			inline: true
-		}, {
-			name: 'Players',
-			value: `\u200b`
-		}, ).setColor("#5b8731").setFooter(`Minecraft Server Status Bot for Discord`)
+		}, ).setColor("#5b8731").setFooter(`ClydeStatus.tk`)
 		try {
 			const message = await channel.messages.fetch(config.pinId);
 			if(!message) return debug('Unable to find message.');
-			await message.edit(`Status for **${saddress}:${sport}**:`, {
+			await message.edit(`Viewing status`, {
 				embed
 			});
 			debug('Updated pin.');
@@ -202,24 +194,20 @@ client.on('message', async(message) => {
 						name: 'Motd',
 						value: `${body.motd ? `${cleanMotD}` : '\u200b'}`
 					}, {
+						name: 'Players',
+						value: `${body.players.now}/${body.players.max} ${(body.players.sample == null?'':playersNow)}`
+					}, {
 						name: 'Version',
 						value: `${body.server.name ? `${body.server.name}` : '\u200b'}`,
 						inline: true
-					}, {
-						name: 'Status',
-						value: `${(body.online ? "Online" : "Offline")}`,
-						inline: true
-					}, {
-						name: 'Players',
-						value: `${body.players.now}/${body.players.max} ${(body.players.sample == null?'':playersNow)}`
-					}, ).setColor("#5b8731").setFooter(`Minecraft Server Status Bot for Discord`)
+					}, ).setColor("#5b8731").setFooter(`ClydeStatus.tk`)
 					message.channel.send(`Status for **${saddress}:${sport}**:`, {
 						embed
 					})
 				} else {
 					message.delete().catch()
 					const errorm = body.error;
-					message.channel.send(`Looks like the server is not reachable... Please verify it's online and not blocking access!`).then(r => r.delete({
+					message.channel.send(`Unable to Contact Your Server, is it online/proxied/firewall?`).then(r => r.delete({
 						timeout: 3000
 					}));
 				}
@@ -244,7 +232,7 @@ client.on('message', async(message) => {
 				message.channel.send(`Online: ${body.players.now}/${body.players.max} ${playersNow}`);
 			} else {
 				message.delete().catch()
-				message.channel.send(`Looks like the server is not reachable... Please verify it's online and not blocking access!`).then(r => r.delete({
+				message.channel.send(`Unable to Contact Your Server, is it online/proxied/firewall?`).then(r => r.delete({
 					timeout: 3000
 				}));
 			}
@@ -281,18 +269,14 @@ client.on('message', async(message) => {
 						name: 'Motd',
 						value: `${body.motd ? `${cleanMotD}` : '\u200b'}`
 					}, {
+						name: 'Players',
+						value: `${body.players.now}/${body.players.max} ${(body.players.sample == null?'':playersNow)}`
+					}, {
 						name: 'Version',
 						value: `${body.server.name ? `${body.server.name}` : '\u200b'}`,
 						inline: true
-					}, {
-						name: 'Status',
-						value: `${(body.online ? "Online" : "Offline")}`,
-						inline: true
-					}, {
-						name: 'Players',
-						value: `${body.players.now}/${body.players.max} ${(body.players.sample == null?'':playersNow)}`
-					}, ).setColor("#5b8731").setFooter(`Minecraft Server Status Bot for Discord`)
-					message.channel.send(`Status for **${saddress}:${sport}**:`, {
+					}, ).setColor("#5b8731").setFooter(`ClydeStatus.tk`)
+					message.channel.send(`Status for **${saddress}**:`, {
 						embed
 					}).then((message) => message.pin()).then(sent => { // 'sent' is that message you just sent
 						let id = sent.id;
@@ -311,17 +295,13 @@ client.on('message', async(message) => {
 						name: 'Motd',
 						value: `\u200b`
 					}, {
+						name: 'Players',
+						value: `\u200b`
+					}, {
 						name: 'Version',
 						value: `\u200b`,
 						inline: true
-					}, {
-						name: 'Status',
-						value: `${(body.online ? "Online" : "Offline")}`,
-						inline: true
-					}, {
-						name: 'Players',
-						value: `\u200b`
-					}, ).setColor("#5b8731").setFooter(`Minecraft Server Status Bot for Discord`)
+					}, ).setColor("#5b8731").setFooter(`ClydeStatus.tk`)
 					message.channel.send(`Status for **${saddress}:${sport}**:`, {
 						embed
 					}).then((message) => message.pin()).then(sent => { // 'sent' is that message you just sent
